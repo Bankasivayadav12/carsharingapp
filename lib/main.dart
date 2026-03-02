@@ -2,21 +2,24 @@
 // 📦 IMPORTS
 // ------------------------------------------------------------
 import 'dart:async'; // ⏱️ For Timer
-import 'package:carsharingapp/screens/Time_Share_Screen.dart';
-import 'package:carsharingapp/screens/rent_to_own.dart';
-import 'package:carsharingapp/screens/test_page.dart';
-import 'package:carsharingapp/screens/user_screen.dart';
+
+import 'package:f_demo/screens/Splash/splash_screen.dart';
+import 'package:f_demo/screens/CarSharing/User/user_screen.dart';
+import 'package:f_demo/screens/CarSharing/User/users_registration.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';  // ⭐ ADD GETX
+import 'package:get/get.dart'; // ⭐ ADD GETX
+import 'screens/CarSharing/User/controller/carsharing_user_controller.dart';
 import 'utils/theme_colors.dart';
-import 'screens/host_screen.dart';
+import 'screens/CarSharing/host/host_screen.dart';
 
 // ------------------------------------------------------------
 // 🏁 MAIN ENTRY POINT (with GetX Initialization)
 // ------------------------------------------------------------
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   // ⭐ Initialize GetX Service (if any)
+
   runApp(const RideALottApp());
 }
 
@@ -32,7 +35,7 @@ class RideALottApp extends StatelessWidget {
       title: 'RideALott Sharing',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeData,
-      home: const HomePageContent(),
+      home: const LuxurySplashScreen(),
     );
   }
 }
@@ -48,6 +51,10 @@ class HomePageContent extends StatefulWidget {
 }
 
 class _HomePageContentState extends State<HomePageContent> {
+
+  final UserDetailsController userController =   // for checking user exist or not for user button
+  Get.put(UserDetailsController());
+
   late final PageController _pageController;
   int _currentPage = 0;
   Timer? _autoScrollTimer;
@@ -289,61 +296,62 @@ class _HomePageContentState extends State<HomePageContent> {
 
                   const SizedBox(height: 16),
 
-                  // ⏰ TIME SHARING → Direct Navigation to TimeSharePage
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.userOrange,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      minimumSize: const Size(double.infinity, 55),
-                    ),
-                    onPressed: () {
-                      Get.to(() => RentToOwnMainScreen()); // ⭐ DIRECT NAVIGATION
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.access_time, color: Colors.white),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Rent To Own",
-                          style: AppTheme.buttonText,
-                        ),
-                      ],
-                    ),
-                  ),
+                  // ⏰ RENT TO OWN   → Direct Navigation to TimeSharePage
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: AppTheme.userOrange,
+                  //     padding: const EdgeInsets.symmetric(
+                  //         horizontal: 40, vertical: 16),
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(14),
+                  //     ),
+                  //     minimumSize: const Size(double.infinity, 55),
+                  //   ),
+                  //   onPressed: () {
+                  //     Get.to(() => RentToOwnMainScreen()); // ⭐ DIRECT NAVIGATION
+                  //   },
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       const Icon(Icons.access_time, color: Colors.white),
+                  //       const SizedBox(width: 8),
+                  //       Text(
+                  //         "Rent To Own",
+                  //         style: AppTheme.buttonText,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                   const SizedBox(height: 16),
 
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.userGreen,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      minimumSize: const Size(double.infinity, 55),
-                    ),
-                    onPressed: () {
-                      Get.to(() =>  TimeShareCarsListPage()); // ⭐ DIRECT NAVIGATION
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.access_time, color: Colors.white),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Time Sharing",
-                          style: AppTheme.buttonText,
-                        ),
-                      ],
-                    ),
-                  ),
+               //-------------- Time sharing ----------------//
 
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: AppTheme.userGreen,
+                  //     padding: const EdgeInsets.symmetric(
+                  //         horizontal: 40, vertical: 16),
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(14),
+                  //     ),
+                  //     minimumSize: const Size(double.infinity, 55),
+                  //   ),
+                  //   onPressed: () {
+                  //     Get.to(() =>  TimeShareCarsListPage()); // ⭐ DIRECT NAVIGATION
+                  //   },
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       const Icon(Icons.access_time, color: Colors.white),
+                  //       const SizedBox(width: 8),
+                  //       Text(
+                  //         "Time Sharing",
+                  //         style: AppTheme.buttonText,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
 
                 ],
               ),
@@ -401,13 +409,23 @@ class _HomePageContentState extends State<HomePageContent> {
               const SizedBox(height: 15),
 
               // ⏰ USER – TIME SHARING
+              // ⏰ USER – TIME SHARING
               _bottomButton(
                 icon: Icons.access_time,
                 label: "User",
                 color: AppTheme.userGreen,
-                onTap: () {
+                onTap: () async {
                   Navigator.pop(context);
-                  Get.to(() =>  UserCarsScreen()); // ⭐ USING GETX NAVIGATION
+
+                  int userId = 199; // replace with actual logged-in id
+
+                  await userController.checkUser(userId);
+
+                  if (userController.isUserExists.value) {
+                    Get.to(() => UserCarsScreen());
+                  } else {
+                    Get.to(() => UserRegisterPage(userId: 199,));
+                  }
                 },
               ),
 
